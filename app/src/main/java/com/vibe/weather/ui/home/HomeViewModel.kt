@@ -20,6 +20,10 @@ class HomeViewModel(private val repository: WeatherRepository) : ViewModel() {
     private val _state = MutableStateFlow<UiState>(UiState.Loading)
     val state: StateFlow<UiState> = _state.asStateFlow()
 
+    /** M0 视觉对比：当前展示风格。定稿后删除败者。 */
+    private val _style = MutableStateFlow(VisualStyle.NIGHT_WINDOW)
+    val style: StateFlow<VisualStyle> = _style.asStateFlow()
+
     init {
         refresh()
     }
@@ -33,9 +37,16 @@ class HomeViewModel(private val repository: WeatherRepository) : ViewModel() {
         }
     }
 
-    /** 点按头部轮换演示天气，预览各场景（M1.5 起换成数据源切换）。 */
+    /** 点按头部轮换演示天气，预览各场景。 */
     fun cycleConditions() {
         repository.cycleDemoConditions()
         refresh()
+    }
+
+    /** 点按底部在两套候选风格间切换。 */
+    fun cycleStyle() {
+        _style.value =
+            if (_style.value == VisualStyle.NIGHT_WINDOW) VisualStyle.MONO
+            else VisualStyle.NIGHT_WINDOW
     }
 }

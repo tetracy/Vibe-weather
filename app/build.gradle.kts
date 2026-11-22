@@ -46,5 +46,8 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-compose:2.9.4")
     implementation("androidx.core:core-ktx:1.17.0")
 
+    // Haze 2.x 全线要求 compileSdk 37（2026-11-22 实测 AAR 元数据 minCompileSdk=37），
+    // 本机装不了平台 37，玻璃卡暂以同规格纱面实现；平台 37 可装后接回（docs/research §2.3）。
+
     testImplementation("junit:junit:4.13.2")
 }

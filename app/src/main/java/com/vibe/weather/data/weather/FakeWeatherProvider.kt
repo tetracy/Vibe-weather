@@ -39,13 +39,14 @@ class FakeWeatherProvider : WeatherProvider {
             )
         }
 
+        // 温度刻意铺满六档色（docs/research §3.3），方便预览彩色温度范围条
         val dayCodes = listOf(
-            WeatherCode.RAIN, WeatherCode.PARTLY_CLOUDY, WeatherCode.SUNNY,
-            WeatherCode.CLOUDY, WeatherCode.THUNDER, WeatherCode.SNOW, WeatherCode.PARTLY_CLOUDY,
+            WeatherCode.RAIN, WeatherCode.PARTLY_CLOUDY, WeatherCode.SNOW,
+            WeatherCode.CLOUDY, WeatherCode.THUNDER, WeatherCode.SUNNY, WeatherCode.PARTLY_CLOUDY,
         )
-        val dayProbs = listOf(70, 40, 5, 10, 85, 30, 20)
-        val dayMins = listOf(6, 5, 4, 5, 8, -2, 0)
-        val dayMaxs = listOf(13, 12, 11, 12, 15, 3, 5)
+        val dayProbs = listOf(70, 40, 30, 10, 85, 5, 20)
+        val dayMins = listOf(12, 5, -2, 8, 22, 28, 18)
+        val dayMaxs = listOf(21, 14, 6, 17, 31, 33, 26)
         val daily = (0 until 7).map { i ->
             DayForecast(LocalDate.now().plusDays(i.toLong()), dayMins[i], dayMaxs[i], dayProbs[i], dayCodes[i])
         }
