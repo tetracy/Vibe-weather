@@ -24,6 +24,7 @@ import com.vibe.weather.ui.theme.PixelFont
 /**
  * 定稿视觉的降雨带：纯白系条，高度=概率、不透明度随概率爬升；
  * ≥50% 拉满并标点阵数字（docs/research/design-references.md §5.1）。
+ * 柱底 1dp 基线贯穿整条（列无缝相接自然连成），当前小时列提亮做「现在」锚点。
  */
 @Composable
 fun MonoRainStrip(hours: List<HourForecast>, modifier: Modifier = Modifier) {
@@ -32,14 +33,14 @@ fun MonoRainStrip(hours: List<HourForecast>, modifier: Modifier = Modifier) {
             .fillMaxWidth()
             .horizontalScroll(rememberScrollState()),
     ) {
-        hours.forEach { hour ->
-            MonoHourColumn(hour)
+        hours.forEachIndexed { index, hour ->
+            MonoHourColumn(hour, isNow = index == 0)
         }
     }
 }
 
 @Composable
-private fun MonoHourColumn(hour: HourForecast) {
+private fun MonoHourColumn(hour: HourForecast, isNow: Boolean) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         modifier = Modifier.width(42.dp),
@@ -60,6 +61,13 @@ private fun MonoHourColumn(hour: HourForecast) {
                 .height(96.dp),
             contentAlignment = Alignment.BottomCenter,
         ) {
+            // 基线：列与列无缝相接，连成一条贯穿的参照线
+            Box(
+                Modifier
+                    .fillMaxWidth()
+                    .height(1.dp)
+                    .background(Color.White.copy(alpha = if (isNow) 0.45f else 0.28f))
+            )
             if (hour.precipProbability > 0) {
                 val alpha =
                     if (hour.precipProbability >= 50) 0.95f
@@ -76,7 +84,7 @@ private fun MonoHourColumn(hour: HourForecast) {
             text = "${hour.time.hour}",
             fontSize = 10.sp,
             fontFamily = PixelFont,
-            color = Color.White.copy(alpha = 0.55f),
+            color = if (isNow) Color.White else Color.White.copy(alpha = 0.55f),
         )
     }
 }
